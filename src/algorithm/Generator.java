@@ -48,7 +48,7 @@ public class Generator {
 	}
 	
 	public boolean approve(HexGrid map) {
-		return (calcSettlementScores(map).lastEntry().getElement() < 13) ;//&& checkSettlementTiles(map);
+		return (calcSettlementScores(map).lastEntry().getElement() < 13) ;
 	}
 	
 	public HexGrid randomize() {

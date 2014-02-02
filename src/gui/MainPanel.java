@@ -27,7 +27,7 @@ public class MainPanel extends JPanel {
 		regenButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Generator.getInstance().randomize();
+				Generator.getInstance().generate();
 				repaint();
 			}
 		});

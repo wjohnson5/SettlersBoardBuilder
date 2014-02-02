@@ -38,7 +38,9 @@ public class HexGrid implements Iterable<Hex>, Drawable {
 		}
 	}
 	
-	ImmutableSet<Hex> getNeighbors(int x, int y) {
+	public ImmutableSet<Hex> getNeighbors(Hex h) {
+		int x = h.x;
+		int y = h.y;
 		ImmutableSet.Builder<Hex> s = ImmutableSet.builder();
 		s.addAll(get(x-1,y).asSet());
 		s.addAll(get(x-1,y+1).asSet());

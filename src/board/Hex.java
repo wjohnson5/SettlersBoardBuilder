@@ -8,7 +8,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 import algorithm.Convert;
-import tiles.NumberedTile.Type;
+import tiles.GoldTile;
 import tiles.Tile;
 
 
@@ -40,8 +40,8 @@ public class Hex implements Drawable {
 	}
 	
 	int getDots() {
-		if (t.equals(Type.GOLD)) {
-			return 3*(6 - Math.abs(number - 7))/2;
+		if (t instanceof GoldTile) {
+			return 5*(6 - Math.abs(number - 7))/3;
 		}
 		return 6 - Math.abs(number - 7);
 	}

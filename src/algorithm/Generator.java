@@ -16,7 +16,7 @@ import com.google.common.collect.TreeMultiset;
 
 public class Generator {
 	int width = 7;
-	int height = 8;
+	int height = 7;
 	int players = 6;
 	
 	private static Generator _this;

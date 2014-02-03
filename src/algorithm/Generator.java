@@ -57,7 +57,7 @@ public class Generator {
 	}
 	
 	private HexGrid randomize() throws FailedMapException {
-		map = new HexGrid(settings.getWidth(), settings.getHeight());
+		map = new HexGrid();
 		int mapSize = Iterables.size(map);
 		TileBag tiles = new TileBag(mapSize, settings.getPlayers());
 		NumberBag numbers = new NumberBag(tiles.getResourceTileCounts());		

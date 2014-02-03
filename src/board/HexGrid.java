@@ -4,6 +4,9 @@ import gui.Drawable;
 import java.awt.Graphics;
 import java.util.Iterator;
 
+import algorithm.Settings;
+import algorithm.Settings.HexSetting;
+
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableTable;
@@ -11,20 +14,16 @@ import com.google.common.collect.Table.Cell;
 
 
 public class HexGrid implements Iterable<Hex>, Drawable {
-	int width;
-	int height;
 	ImmutableTable<Integer, Integer, Hex> map;
+	ImmutableTable<Integer, Integer, HexSetting> boundary;
 	
-	public HexGrid(int width, int height) {
-		this.width = width;
-		this.height = height;
+	public HexGrid() {
+		this.boundary = Settings.getInstance().getBoundary().getMap();
 		
 		ImmutableTable.Builder<Integer, Integer, Hex> b = ImmutableTable.builder();
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				if (isInBounds(x,y)) {
-					b.put(x, y, new Hex(x, y));
-				}
+		for (Cell<Integer, Integer, HexSetting> c : boundary.cellSet()) {
+			if (c.getValue().equals(HexSetting.LAND)) {
+				b.put(c.getRowKey(), c.getColumnKey(), new Hex(c.getRowKey(), c.getColumnKey()));
 			}
 		}
 		map = b.build();
@@ -32,7 +31,11 @@ public class HexGrid implements Iterable<Hex>, Drawable {
 	
 	Optional<Hex> get(int x, int y) {
 		if (isInBounds(x, y)) {
-			return Optional.of(map.get(x, y));
+			if (map.get(x, y) == null) {
+				return Optional.of(Hex.createLockedWaterHex(x, y));
+			} else {
+				return Optional.of(map.get(x, y));
+			}
 		} else {
 			return Optional.absent();
 		}
@@ -67,23 +70,18 @@ public class HexGrid implements Iterable<Hex>, Drawable {
 	
 	public ImmutableSet<Settlement> getAllSettlements() {
 		ImmutableSet.Builder<Settlement> b = new ImmutableSet.Builder<>();
-		for (int x = 0; x <= width; x++) {
-			for (int y = 0; y <= height; y++) {
-				if (isInBounds(x,y) || isInBounds(x,y-1) || isInBounds(x-1,y)) {
-					b.addAll(getSettlements(x,y));
-				}
+		for (Cell<Integer, Integer, HexSetting> c : boundary.cellSet()) {
+			int x = c.getRowKey();
+			int y = c.getColumnKey();
+			if (isInBounds(x,y) || isInBounds(x,y-1) || isInBounds(x-1,y) || isInBounds(x+1,y-1)) {
+				b.addAll(getSettlements(x,y));
 			}
 		}
 		return b.build();
 	}
 	
 	boolean isInBounds(int x, int y) {
-		return !(x < 0 
-				|| x >= width 
-				|| y < 0 
-				|| y >= height 
-				|| x + y < 2 
-				|| x + y > width + height - 4);
+		return boundary.get(x, y) != null && !boundary.get(x, y).equals(HexSetting.DISABLED);
 	}
 
 	@Override
@@ -96,8 +94,19 @@ public class HexGrid implements Iterable<Hex>, Drawable {
 		return new Drawer(g) {
 			@Override
 			public void draw() {
-				for (Cell<Integer, Integer, Hex> c : map.cellSet()) {
-					c.getValue().on(g()).at(c.getColumnKey(), c.getRowKey()).draw();
+				for (Cell<Integer, Integer, HexSetting> c : boundary.cellSet()) {
+					if (c.getValue().equals(HexSetting.LAND)) {
+						Hex h = map.get(c.getRowKey(), c.getColumnKey());
+						if (h == null) {
+							Hex.createLandHex(c.getRowKey(), c.getColumnKey());
+						} else {
+							h.on(g()).draw();
+						}
+					} else if (c.getValue().equals(HexSetting.WATER)) {
+						Hex.createLockedWaterHex(c.getRowKey(), c.getColumnKey()).on(g()).draw();
+					} else {
+						Hex.createDisabledHex(c.getRowKey(), c.getColumnKey()).on(g()).draw();
+					}
 				}				
 			}			
 		};

@@ -37,7 +37,7 @@ public class TileBag {
 		bag.addAll(Collections.nCopies(n, new GoldTile()));
 		numOfType.add(Type.GOLD, n);
 		
-		bag.addAll(Collections.nCopies(r.nextInt(Math.max(0, Math.min(5, numTiles - bag.size()))) + 1, new DesertTile()));
+		bag.addAll(Collections.nCopies(r.nextInt(Math.max(1, Math.min(5, numTiles - bag.size()))) + 1, new DesertTile()));
 				
 		if (Settings.getInstance().hasAddWater()) {
 			bag.addAll(Collections.nCopies(Math.max(0, numTiles - bag.size()), new WaterTile()));
@@ -51,7 +51,6 @@ public class TileBag {
 		}
 		
 		Collections.shuffle(bag);
-		System.out.println(bag);
 	}
 	
 	public Tile grabTile() {

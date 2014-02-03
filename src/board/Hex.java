@@ -3,16 +3,38 @@ import gui.Drawable;
 import gui.Hexagon;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 
 import algorithm.Convert;
+import tiles.DesertTile;
+import tiles.DisabledTile;
 import tiles.GoldTile;
 import tiles.Tile;
+import tiles.WaterTile;
 
 
 public class Hex implements Drawable {
+	
+	public static Hex createLockedWaterHex(int x, int y) {
+		Hex h = new Hex(x, y);
+		h.setTile(new WaterTile());
+		return h;
+	}
+	
+	public static Hex createDisabledHex(int x, int y) {
+		Hex h = new Hex(x, y);
+		h.setTile(new DisabledTile());
+		return h;
+	}
+	
+	public static Hex createLandHex(int x, int y) {
+		Hex h = new Hex(x, y);
+		h.setTile(new DesertTile());
+		return h;
+	}
 
 	private Tile t;
 	private int number = 1;
@@ -52,7 +74,7 @@ public class Hex implements Drawable {
 			@Override
 			public void draw() {
 				g().setColor(t.getColor());
-				Point p = Convert.fromGameToScreen(x(), y());
+				Point p = Convert.fromGameToScreen(x, y);
 				g().fillPolygon(Hexagon.create(p.x, p.y));
 				if (t.isNumberedTile()) {
 					g().setColor(Color.WHITE);
@@ -63,9 +85,10 @@ public class Hex implements Drawable {
 						g().setColor(Color.BLACK);
 					}
 					String s = String.valueOf(number);
-					FontMetrics fm = g().getFontMetrics();
 		            
-					g().drawString(s, p.x - fm.stringWidth(s)/2, p.y+5);
+					g().setFont(new Font(g().getFont().getFontName(), Font.PLAIN, 20));
+					FontMetrics fm = g().getFontMetrics();
+					g().drawString(s, p.x - fm.stringWidth(s)/2, p.y + fm.getAscent()/2 - 1);
 					
 				}
 			}

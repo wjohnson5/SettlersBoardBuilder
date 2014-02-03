@@ -8,7 +8,7 @@ public class Frame extends JFrame {
 
 	public Frame() {
 		setTitle("Catan Map Generator");
-		setSize(800, 600);
+		setSize(800, 700);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		add(new MainPanel());

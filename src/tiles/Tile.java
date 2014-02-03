@@ -17,7 +17,8 @@ public abstract class Tile {
 		SHEEP (new Color(105,250,52), true),
 		GOLD (new Color(207,181,59), false),
 		WATER (new Color(43,170,255), false),
-		DESERT (new Color(194,178,128), false);
+		DESERT (new Color(194,178,128), false),
+		DISABLED (new Color(255,255,255), false);
 		
 		private Color c;
 		private boolean isResource;

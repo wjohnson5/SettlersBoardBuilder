@@ -8,9 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import algorithm.Generator;
+import algorithm.Settings;
 
 public class MainPanel extends JPanel {
 	static Color SHEEP = new Color(105,250,52);
@@ -24,16 +26,28 @@ public class MainPanel extends JPanel {
 	
 	MainPanel() {
 		JButton regenButton = new JButton("Re-Generate");
+		
+		final JCheckBox waterbox = new JCheckBox("Add Water");
+		waterbox.setSelected(true);
+		final JCheckBox fogbox = new JCheckBox("Fog Of War");
+		fogbox.setSelected(false);
+		
 		regenButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Generator.getInstance().generate();
+				Settings.getInstance()
+					.setAddWater(waterbox.isSelected())
+					.setFogOfWar(fogbox.isSelected());
+				Generator.getInstance()	.generate();
 				repaint();
 			}
 		});
-		JPanel buttonPanel = new JPanel(new GridLayout(2,1));
+		
+		JPanel buttonPanel = new JPanel(new GridLayout(3,1));
 		buttonPanel.setSize(100, 100);
 		buttonPanel.add(regenButton);
+		buttonPanel.add(waterbox);
+		buttonPanel.add(fogbox);
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		add(buttonPanel);
 	}

@@ -4,7 +4,7 @@ public class ResourceTile extends NumberedTile {
 	
 	public ResourceTile(Type type) {
 		super(type);
-		if (type.equals(Type.GOLD)) {
+		if (!type.isResource()) {
 			throw new IllegalArgumentException();
 		}
 	}

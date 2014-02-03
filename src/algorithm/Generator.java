@@ -15,10 +15,8 @@ import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.TreeMultiset;
 
 public class Generator {
-	int width = 7;
-	int height = 7;
-	int players = 6;
 	
+	private static Settings settings = Settings.getInstance();
 	private static Generator _this;
 	private HexGrid map;	
 	
@@ -60,9 +58,9 @@ public class Generator {
 	}
 	
 	private HexGrid randomize() throws FailedMapException {
-		map = new HexGrid(width, height);
+		map = new HexGrid(settings.getWidth(), settings.getHeight());
 		int mapSize = Iterables.size(map);
-		TileBag tiles = new TileBag(mapSize, players);
+		TileBag tiles = new TileBag(mapSize, settings.getPlayers());
 		NumberBag numbers = new NumberBag(tiles.getResourceTileCounts());		
 		for (Hex h : map) {
 			ImmutableSet.Builder<Tile> neighborTiles = ImmutableSet.builder();

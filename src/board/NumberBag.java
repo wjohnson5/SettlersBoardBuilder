@@ -6,7 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import tiles.NumberedTile.Type;
+import tiles.Tile;
+import tiles.Tile.Type;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultiset;
@@ -46,8 +47,7 @@ public class NumberBag {
 		
 		/* Sort the types of resources by the number of tiles they have on the board.
 		 * This way, if a resource has less tiles, it will be more likely to get higher numbers */
-		List<Type> typelist = Lists.newArrayList(Type.values());
-		typelist.remove(Type.GOLD);
+		List<Type> typelist = Lists.newArrayList(Tile.resourceTypes);
 		Collections.sort(typelist, new Comparator<Type>() {
 			@Override
 			public int compare(Type o1, Type o2) {
@@ -68,7 +68,7 @@ public class NumberBag {
 		/* Iterate through the numbers, giving them to each resource type one at a time */
 		int k = 0;
 		while (!bagList.isEmpty()) {
-			Type t = typelist.get(k%5);
+			Type t = typelist.get(k%typelist.size());
 			if (sortedNumbers.get(t).size() < resourceTileCounts.count(t)) {
 				sortedNumbers.put(t, bagList.removeFirst());
 			}

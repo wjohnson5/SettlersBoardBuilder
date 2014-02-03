@@ -7,7 +7,6 @@ import board.HexGrid;
 import board.NumberBag;
 import board.Settlement;
 import board.TileBag;
-import board.TileBag.NoSuchTileException;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
@@ -64,20 +63,19 @@ public class Generator {
 		NumberBag numbers = new NumberBag(tiles.getResourceTileCounts());		
 		for (Hex h : map) {
 			ImmutableSet.Builder<Tile> neighborTiles = ImmutableSet.builder();
+			ImmutableSet.Builder<Integer> neighborNumbers = ImmutableSet.builder();
 			for (Hex n : map.getNeighbors(h)) {
-				if (n.getTile() != null)
+				if (n.getTile() != null) {
 					neighborTiles.add(n.getTile());
+					neighborNumbers.add(n.getNumber());
+				}
 			}
 			Tile t;
-			try {
-				t = tiles.grabTileThatsNotIn(neighborTiles.build());
-			} catch (NoSuchTileException e) {
-				throw new FailedMapException();
-			}
+			t = tiles.grabUniqueTile(neighborTiles.build());
 			h.setTile(t);
 			if (t.isNumberedTile()) {
 				NumberedTile nt = (NumberedTile) t;
-				h.setNumber(numbers.grabNumber(nt.getType()));
+				h.setNumber(numbers.grabUniqueNumber(nt.getType(), neighborNumbers.build()));
 			}
 		}		
 		return map;
@@ -91,7 +89,7 @@ public class Generator {
 		return scores;
 	}
 	
-	public class FailedMapException extends Exception {
+	public static class FailedMapException extends Exception {
 		private static final long serialVersionUID = 934054340095220755L;
 	}
 }

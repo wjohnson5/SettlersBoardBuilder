@@ -8,9 +8,11 @@ import java.util.Random;
 
 import tiles.Tile;
 import tiles.Tile.Type;
+import algorithm.Generator.FailedMapException;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
@@ -88,5 +90,28 @@ public class NumberBag {
 	public Integer grabNumber(Type t) {
 		int s = sortedNumbers.get(t).size();
 		return sortedNumbers.get(t).remove(new Random().nextInt(s));
+	}
+	
+	public Integer grabUniqueNumber(Type t, ImmutableSet<Integer> neighborNumbers) throws NoSuchNumberException {
+		List<Integer> numbersForT = sortedNumbers.get(t);
+		int s = numbersForT.size();
+		if (s == 0) {
+			throw new NoSuchNumberException();
+		}
+		int r = new Random().nextInt(s);
+		int n = numbersForT.get(r);
+		int i = 0;
+		while (neighborNumbers.contains(n)) {
+			i++;
+			if (i >= s) {
+				throw new NoSuchNumberException();
+			}
+			n = numbersForT.get((r+i)%s);
+		}
+		return numbersForT.remove((r+i)%s);
+	}
+	
+	public static class NoSuchNumberException extends FailedMapException {
+		private static final long serialVersionUID = -4443776062653024244L;
 	}
 }

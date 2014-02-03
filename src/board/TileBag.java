@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import algorithm.Generator.FailedMapException;
 import algorithm.Settings;
 
 import com.google.common.collect.HashMultiset;
@@ -57,7 +58,7 @@ public class TileBag {
 		return bag.remove(0);
 	}
 	
-	public Tile grabTileThatsNotIn(ImmutableSet<Tile> s) throws NoSuchTileException {
+	public Tile grabUniqueTile(ImmutableSet<Tile> s) throws NoSuchTileException {
 		int i = 0;
 		if (i >= bag.size()) {
 			throw new NoSuchTileException();
@@ -77,7 +78,7 @@ public class TileBag {
 		return numOfType;
 	}
 	
-	public class NoSuchTileException extends Exception {
+	public static class NoSuchTileException extends FailedMapException {
 		private static final long serialVersionUID = -3795743322829430816L;
 	}
 }

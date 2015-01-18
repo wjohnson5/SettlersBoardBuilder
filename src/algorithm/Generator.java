@@ -32,7 +32,7 @@ public class Generator {
 	
 	public HexGrid getMap() {
 		if (map == null) {
-			map = generate();
+			map = new HexGrid();
 		}
 		return map;
 	}

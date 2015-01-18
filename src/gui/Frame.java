@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
 
 public class Frame extends JFrame {
 
@@ -11,7 +12,10 @@ public class Frame extends JFrame {
 		setSize(800, 700);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		add(new MainPanel());
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.addTab("Map", new MapPanel());
+		tabbedPane.addTab("Stats", new StatsPanel());
+		add(tabbedPane);
 	}
 
 }

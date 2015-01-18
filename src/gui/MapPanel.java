@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -19,19 +18,13 @@ import algorithm.Convert;
 import algorithm.Generator;
 import algorithm.Settings;
 
-public class MainPanel extends JPanel {
-	static Color SHEEP = new Color(105,250,52);
-	static Color WOOD = new Color(10,115,0);
-	static Color ORE = new Color(150,150,150);
-	static Color WHEAT = new Color(255,241,41);
-	static Color BRICK = new Color(219,104,33);
-	static Color WATER = new Color(43,170,255);
-	static Color DESERT = new Color(194,178,128);
-	static Color GOLD = new Color(207,181,59);
+public class MapPanel extends JPanel {
 	
-	boolean editMode = true;
+	private static final long serialVersionUID = 5945192644470506206L;
 	
-	MainPanel() {
+	private boolean editMode = true;
+	
+	MapPanel() {
 		
 		final JCheckBox waterbox = new JCheckBox("Add Water");
 		waterbox.setSelected(true);
@@ -95,6 +88,9 @@ public class MainPanel extends JPanel {
 				if (editMode) {
 					Settings.getInstance().toggle(Convert.fromScreenToGame(e.getPoint()));
 					repaint();
+				} else {
+					Generator.getInstance().getMap().display(Convert.fromScreenToGame(e.getPoint()));
+					repaint();
 				}
 			}
 			@Override
@@ -105,8 +101,6 @@ public class MainPanel extends JPanel {
 			public void mouseExited(MouseEvent e) {}			
 		});
 	}
-	
-	private static final long serialVersionUID = 5945192644470506206L;
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);

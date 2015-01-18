@@ -28,7 +28,7 @@ public class TileBag {
 		Random r = new Random();	
 		
 		for (Type t : Tile.resourceTypes) {
-				int n = r.nextInt(3) + numPlayers - 1;
+				int n = r.nextInt(2) + numPlayers;
 				bag.addAll(Collections.nCopies(n, new ResourceTile(t)));
 				numOfType.add(t, n);
 		}

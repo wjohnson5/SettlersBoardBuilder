@@ -2,6 +2,7 @@ package board;
 import gui.Drawable;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.util.Iterator;
 
 import algorithm.Settings;
@@ -38,6 +39,12 @@ public class HexGrid implements Iterable<Hex>, Drawable {
 			}
 		} else {
 			return Optional.absent();
+		}
+	}
+	
+	public void display(Point p) {
+		if (get(p.x,p.y).isPresent()) {
+			get(p.x,p.y).get().setVisible();
 		}
 	}
 	
